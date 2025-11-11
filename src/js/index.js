@@ -52,10 +52,10 @@ bgColorOrder.addEventListener("mouseover", function () {
 	bgColorOrder.style.boxShadow = "0 0 10px black";
 });
 bgColorOrder.addEventListener("mouseout", function () {
-	bgColorOrder.style.backgroundColor = "#8B6A4A";
-	bgColorOrder.style.color = "#cdc6b2";
+	bgColorOrder.style.backgroundColor = "";
+	bgColorOrder.style.color = "#4B2E19";
 	bgColorOrder.style.transition = "0.5s";
-	bgColorOrder.style.borderColor = "black";
+	bgColorOrder.style.borderColor = "";
 	bgColorOrder.style.boxShadow = "0 0 0px";
 });
 
@@ -71,19 +71,19 @@ bgColorMenu.addEventListener("mouseout", function () {
 	bgColorMenu.style.boxShadow = "0 0 0px";
 });
 
-const bgColorLogSign = document.querySelector(".log-btn");
-bgColorLogSign.addEventListener("mouseover", function () {
-	bgColorLogSign.style.backgroundColor = "#6B4F33";
-	bgColorLogSign.style.color = "white";
-	bgColorLogSign.style.transition = "0.5s";
-	bgColorLogSign.style.boxShadow = "0 0 10px black";
+const bgColorCart = document.querySelector(".cart-btn");
+bgColorCart.addEventListener("mouseover", function () {
+	bgColorCart.style.backgroundColor = "#6B4F33";
+	bgColorCart.style.color = "white";
+	bgColorCart.style.transition = "0.5s";
+	bgColorCart.style.boxShadow = "0 0 10px black";
 });
-bgColorLogSign.addEventListener("mouseout", function () {
-	bgColorLogSign.style.backgroundColor = "";
-	bgColorLogSign.style.color = "#4B2E19";
-	bgColorLogSign.style.transition = "0.5s";
-	bgColorLogSign.style.borderColor = "";
-	bgColorLogSign.style.boxShadow = "0 0 0px";
+bgColorCart.addEventListener("mouseout", function () {
+	bgColorCart.style.backgroundColor = "";
+	bgColorCart.style.color = "#4B2E19";
+	bgColorCart.style.transition = "0.5s";
+	bgColorCart.style.borderColor = "";
+	bgColorCart.style.boxShadow = "0 0 0px";
 });
 
 // Dark Mode Functionality
@@ -123,3 +123,67 @@ function updateDarkModeIcon(isDark) {
 
 darkModeBtn.addEventListener("click", toggleDarkMode);
 darkModeBtnMobile.addEventListener("click", toggleDarkMode);
+
+// FOR MENU CATEGORY
+
+const categoryButtons = document.querySelectorAll(".category-btn");
+const tabButtons = document.querySelectorAll(".tab-btn");
+const products = document.querySelectorAll(".grid > a");
+
+let activeCategory = "coffee"; // default
+let activeTab = "hot"; // default
+
+// Category button click
+categoryButtons.forEach((button) => {
+	button.addEventListener("click", () => {
+		activeCategory = button.dataset.category;
+
+		categoryButtons.forEach((btn) => {
+			btn.classList.toggle("active", btn.dataset.category === activeCategory);
+			btn.classList.toggle("inactive", btn.dataset.category !== activeCategory);
+		});
+
+		filterProducts();
+	});
+});
+
+// Hot/Iced tab click
+tabButtons.forEach((button) => {
+	button.addEventListener("click", () => {
+		activeTab = button.dataset.tab;
+
+		tabButtons.forEach((btn) => {
+			btn.classList.toggle("active", btn.dataset.tab === activeTab);
+			btn.classList.toggle("inactive", btn.dataset.tab !== activeTab);
+		});
+
+		filterProducts();
+	});
+});
+
+function filterProducts() {
+	products.forEach((product) => {
+		const category = product.dataset.category;
+		const priceOptions = product.querySelectorAll(".price-option");
+
+		// Show/hide product by category
+		product.style.display = category === activeCategory ? "flex" : "none";
+
+		// Show/hide price options by tab
+		priceOptions.forEach((option) => {
+			if (
+				(activeTab === "hot" && option.classList.contains("hot-only")) ||
+				(activeTab === "iced" && option.classList.contains("iced-only")) ||
+				(!option.classList.contains("hot-only") &&
+					!option.classList.contains("iced-only"))
+			) {
+				option.classList.remove("hidden");
+			} else {
+				option.classList.add("hidden");
+			}
+		});
+	});
+}
+
+// Initialize
+filterProducts();
